@@ -1,9 +1,7 @@
 const inputtablebody = document.getElementById("inputtablebody")
 const inputId = document.getElementById("inputId")
 const inputNombre = document.getElementById("inputNombre")
-const inputCorreo = document.getElementById("inputCorreo")
-const inputContraseña = document.getElementById("inputContraseña")
-const inputEdad = document.getElementById("inputEdad")
+const inputDescripcion = document.getElementById("inputDescripcion")
 const contenedorId = document.getElementById("contenedorId")
 
 const btnsAgregar = document.getElementsByClassName("btn-agregar")
@@ -35,9 +33,7 @@ function crear(){
 
     var raw = JSON.stringify({
     "name": inputNombre.value,
-    "email": inputCorreo.value,
-    "password": inputContraseña.value,
-    "age": inputEdad.value
+    "description": inputDescripcion.value
     });
 
     var requestOptions = {
@@ -47,7 +43,7 @@ function crear(){
     redirect: 'follow'
     };
 
-    fetch("http://localhost:8090/api/Client/save", requestOptions)
+    fetch("http://localhost:8090/api/Gama/save", requestOptions)
     .then(response => {
         window.location.reload()
     })
@@ -60,7 +56,7 @@ function obtener(){
         redirect: 'follow'
       };
       
-      fetch("http://localhost:8090/api/Client/all", requestOptions)
+      fetch("http://localhost:8090/api/Gama/all", requestOptions)
         .then(response => response.json())
         .then(result => {
             result.forEach(element => {
@@ -68,9 +64,8 @@ function obtener(){
                 `
                     <tr>
                         <td>${element.name}</td>
-                        <td>${element.email}</td>
-                        <td>${element.age}</td>
-                        <td><button type="button" class="btn btn-warning"  data-bs-toggle="modal" data-bs-target="#modal" onclick="btnDetalles(${element.idClient})">
+                        <td>${element.description}</td>
+                        <td><button type="button" class="btn btn-warning"  data-bs-toggle="modal" data-bs-target="#modal" onclick="btnDetalles(${element.idGama})">
                             Detalles
                         </button>
                         </td>
@@ -87,32 +82,31 @@ function obtenerPorId(id){
     redirect: 'follow'
       };
       
-      fetch(`http://localhost:8090/api/Client/${id}`, requestOptions)
+      fetch(`http://localhost:8090/api/Gama/${id}`, requestOptions)
         .then(response => response.json())
         .then(result => {
             if(result){
-                inputId.value = result.idClient
+                inputId.value = result.idGama
                 inputNombre.value = result.name
-                inputCorreo.value = result.email
-                inputContraseña.value = result.password
-                inputEdad.value = result.age
+                inputDescripcion.value = result.description
             }
         })
         .catch(error => console.log('error', error));
 }
 
 function eliminarPorId(){
-    var requestOptions = {
-        method: 'DELETE',
-        redirect: 'follow'
-      };
-      
-      fetch(`http://localhost:8090/api/Client/${inputId.value}`, requestOptions)
-        .then(response => {
-            console.log(response)
-            window.location.reload()
-        })
-        .catch(error => console.log('error', error));
+
+        var requestOptions = {
+            method: 'DELETE',
+            redirect: 'follow'
+          };
+          
+          fetch(`http://localhost:8090/api/Gama/${inputId.value}`, requestOptions)
+            .then(response => {
+                console.log(response)
+                window.location.reload()
+            })
+            .catch(error => console.log('error', error));
 }
 
 function actualizarPorId(){
@@ -120,11 +114,9 @@ function actualizarPorId(){
 myHeaders.append("Content-Type", "application/json");
 
 var raw = JSON.stringify({
-  "idClient": inputId.value,
+  "idGama": inputId.value,
   "name": inputNombre.value,
-  "email": inputCorreo.value,
-  "password": inputContraseña.value,
-  "age": inputEdad.value
+  "description": inputDescripcion.value
 });
 
 var requestOptions = {
@@ -134,7 +126,7 @@ var requestOptions = {
   redirect: 'follow'
 };
 
-fetch("http://localhost:8090/api/Client/update", requestOptions)
+fetch("http://localhost:8090/api/Gama/update", requestOptions)
   .then(response => {
     console.log(response)
     window.location.reload()
@@ -144,10 +136,7 @@ fetch("http://localhost:8090/api/Client/update", requestOptions)
 
 function limpiarInput(){
     inputId.value = null
-    inputNombre.value = null 
-    inputCorreo.value = null
-    inputContraseña.value = null
-    inputEdad.value = null
+    inputDescripcion.value = null
 }
 
 obtener()
